@@ -1,14 +1,15 @@
 FROM ubuntu:precise
-MAINTAINER magicmonty@pagansoft.de
+MAINTAINER Martin Gondermann magicmonty@pagansoft.de
 
 # Install all that’s needed
 ENV DEBIAN_FRONTEND noninteractive
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list && \
-	apt-get update && \
-	apt-get -y upgrade && \
-	apt-get -y install mysql-client apache2 libapache2-mod-php5 pwgen python-setuptools vim-tiny php5-mysql openssh-server sudo php5-ldap unzip && \
-	apt-get clean && \
-	rm -rf /var/lib/apt/lists/*
+  apt-get update && \
+  apt-get -y upgrade && \
+  apt-get -y install mysql-client apache2 libapache2-mod-php5 pwgen python-setuptools vim-tiny php5-mysql openssh-server sudo php5-ldap unzip && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
 RUN easy_install supervisor
 
 # Add all config and start files
@@ -24,6 +25,11 @@ ENV APACHE_RUN_GROUP www-data
 ENV APACHE_LOG_DIR /var/log/apache2
 
 VOLUME ["/data"]
+
+# Add site to apache
+ADD ./joomla /etc/apache2/sites-available/
+RUN a2ensite joomla
+RUN a2dissite 000-default
 
 # Set root password to access through ssh
 RUN echo "root:desdemona" | chpasswd
