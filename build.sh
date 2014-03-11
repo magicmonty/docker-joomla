@@ -1,6 +1,12 @@
 #!/bin/bash
-docker build -t data-store data-store/Dockerfile && \
-	docker build -t site-db site-db/Dockerfile && \
-	docker build -t web-machine web-machine/Dockerfile
+docker build -t data-store data-store && \
+	docker build -t site-db site-db && \
+	docker build -t web-machine web-machine
 
-docker rm `docker ps -notrunc -a -q`
+REPOS=$(docker ps -notrunc -a -q)
+echo Removing
+echo $REPOS
+echo ---
+
+docker rm `docker ps -notrunc -a -q` > /dev/null 2>&1
+docker ps -a
