@@ -83,6 +83,11 @@ ENV APACHE_LOG_DIR /var/log/apache2
 
 VOLUME ["/data"]
 
+# Add site to apache
+ADD web-machine/joomla /etc/apache2/sites-available/
+RUN a2ensite joomla
+RUN a2dissite 000-default
+
 # Set root password to access through ssh
 RUN echo "root:desdemona" | chpasswd
 
